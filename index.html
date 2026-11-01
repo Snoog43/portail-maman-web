@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mes sites</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>">
+<style>
+  :root {
+    --fond: #f7f0e6; --carte: rgba(255,255,255,.72); --bord: #e4d3bf;
+    --texte: #3d2a20; --doux: #7a6455; --accent: #8b2e3c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background: var(--fond); color: var(--texte);
+    font: 17px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex; flex-direction: column; align-items: center; padding: 40px 16px;
+  }
+  h1 { margin: 0 0 6px; font-size: 1.9rem; font-weight: 650; text-align: center; }
+  .sous { margin: 0 0 32px; color: var(--doux); text-align: center; }
+  .grille {
+    width: 100%; max-width: 860px; display: grid; gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  a.site {
+    display: flex; gap: 16px; align-items: center; padding: 22px 20px;
+    background: var(--carte); border: 1px solid var(--bord); border-radius: 18px;
+    color: inherit; text-decoration: none; backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgba(90,60,40,.06);
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  a.site:hover, a.site:focus-visible {
+    transform: translateY(-2px); border-color: var(--accent);
+    box-shadow: 0 8px 22px rgba(90,60,40,.14); outline: none;
+  }
+  .ico { font-size: 2.6rem; line-height: 1; flex: none; }
+  .nom { font-size: 1.2rem; font-weight: 650; color: var(--accent); }
+  .desc { color: var(--doux); font-size: .95rem; margin-top: 2px; }
+  a.site.bientot { opacity: .55; pointer-events: none; }
+  footer { margin-top: auto; padding-top: 40px; color: var(--doux); font-size: .85rem; }
+</style>
+</head>
+<body>
+  <h1>Bonjour Magali 🌸</h1>
+  <p class="sous">Choisissez le site où vous voulez aller</p>
+  <main class="grille" id="grille"></main>
+  <footer>Astuce : ajoutez cette page à vos favoris.</footer>
+<script>
+const SITES = [
+  { nom: 'Chocolat Maga', ico: '🍫', desc: 'Chocolats, grands crus et carte du cacao', url: 'https://snoog43.github.io/maga-web/' },
+  { nom: 'Circonscription', ico: '🏫', desc: 'Écoles, courriers, rendez-vous, visites', url: 'https://snoog43.github.io/circonscription-grasse/' },
+  { nom: 'Où vivre ?', ico: '🌍', desc: 'Comparer les pays où vivre', url: 'https://snoog43.github.io/ou-vivre-web/' },
+  { nom: 'Investissement retraite', ico: '💶', desc: 'Mon plan héritage 50+, étape par étape', url: 'retraite/' },
+  { nom: 'Ma Garde-Robe', ico: '👗', desc: 'Mes vêtements, tenues et essayages', url: 'https://snoog43.github.io/garde-robe-web/' },
+];
+const g = document.getElementById('grille');
+for (const s of SITES) {
+  const a = document.createElement('a');
+  a.className = 'site' + (s.url ? '' : ' bientot');
+  if (s.url) a.href = s.url;
+  a.innerHTML = `<span class="ico">${s.ico}</span><span><div class="nom"></div><div class="desc"></div></span>`;
+  a.querySelector('.nom').textContent = s.nom;
+  a.querySelector('.desc').textContent = s.url ? s.desc : 'Bientôt en ligne';
+  g.append(a);
+}
+</script>
+</body>
+</html>

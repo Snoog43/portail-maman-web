@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon plan héritage 50+</title>
+<style>body{margin:0;background:#f3f5f4;color:#555;font:16px system-ui,sans-serif;display:grid;place-items:center;min-height:100vh}@media(prefers-color-scheme:dark){body{background:#1d1a17;color:#d9cfc4}}</style>
+</head>
+<body>
+<p>Chargement du plan…</p>
+<script type="module">
+// Le plan est lu en direct sur le site du plan retraite : chaque modification publiée là-bas apparaît ici.
+// Si la page source a trop changé (ou est injoignable), on affiche la dernière copie de secours.
+import { construire } from './construire.js?v=4';
+let html;
+try {
+  const r = await fetch('https://snoog43.github.io/plan-retraite/', { cache: 'no-cache' });
+  if (!r.ok) throw new Error(r.status);
+  html = construire(await r.text());
+} catch (e) {
+  console.warn('Copie de secours :', e.message);
+  html = await (await fetch('secours.html', { cache: 'no-cache' })).text();
+}
+document.open();
+document.write(html);
+document.close();
+</script>
+</body>
+</html>

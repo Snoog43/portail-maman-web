@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Mon plan héritage 50+</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout : une colonne de lecture, frise verticale des phases (de 2026 à 2062), outils en bas */
+:root {
+  --bg: #f3f5f4;          /* gris schiste clair */
+  --surface: #ffffff;
+  --ink: #1d2a27;
+  --muted: #5d6b67;
+  --line: #d6ddda;
+  --accent: #2f6b57;      /* vert chêne vert des Cévennes */
+  --accent-soft: #e2efe9;
+  --chestnut: #8a4b2a;    /* châtaigne : jalons et dates */
+  --warn: #9a5b00;
+  --warn-soft: #fbf0dc;
+  --done: #2f6b57;
+  --s1: #2a78d6;          /* séries du graphique (palette validée) */
+  --s2: #eb6834;
+  --s3: #1baf7a;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131a18; --surface: #1b2421; --ink: #e4ebe8; --muted: #9aa8a3; --line: #2e3a36;
+    --accent: #6fbf9f; --accent-soft: #1f3a31; --chestnut: #d9925f; --warn: #e3a64a; --warn-soft: #3a2c14; --done: #6fbf9f;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131a18; --surface: #1b2421; --ink: #e4ebe8; --muted: #9aa8a3; --line: #2e3a36;
+  --accent: #6fbf9f; --accent-soft: #1f3a31; --chestnut: #d9925f; --warn: #e3a64a; --warn-soft: #3a2c14; --done: #6fbf9f;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 500; }
+p { margin: 0; }
+.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--chestnut); font-weight: 600; }
+.muted { color: var(--muted); }
+a { color: var(--accent); }
+
+header { display: flex; flex-direction: column; gap: 14px; }
+.lede { color: var(--muted); max-width: 62ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.fact { border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 13px; background: var(--surface); }
+
+.progress-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+.bar { height: 10px; background: var(--accent-soft); border-radius: 999px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); width: 0; transition: width .4s ease; }
+.progress-row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.next { font-size: 15px; }
+.next b { font-weight: 600; }
+.sync { font-size: 12px; color: var(--muted); }
+.sync.warn { color: var(--warn); }
+
+/* Frise */
+.timeline { display: flex; flex-direction: column; gap: 36px; }
+.phase { display: grid; grid-template-columns: 22px 1fr; gap: 0 16px; }
+.rail { display: flex; flex-direction: column; align-items: center; }
+.dot { width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--accent); background: var(--bg); margin-top: 6px; flex: none; }
+.phase.complete .dot { background: var(--accent); }
+.rail::after { content: ""; flex: 1; width: 2px; background: var(--line); margin-top: 6px; }
+.phase:last-child .rail::after { display: none; }
+.phase-body { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.phase-head { display: flex; flex-direction: column; gap: 4px; }
+.phase-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.count { font-size: 13px; color: var(--muted); }
+.phase-intro { color: var(--muted); max-width: 62ch; }
+
+.items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.item-row { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 12px 14px; align-items: start; }
+.item input[type=checkbox] { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent); cursor: pointer; }
+.item label { cursor: pointer; font-weight: 500; display: block; }
+.item.done label { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.item .when { font-size: 12px; color: var(--done); margin-top: 2px; }
+.item details { margin-top: 6px; }
+.item summary { font-size: 13px; color: var(--accent); cursor: pointer; width: fit-content; }
+.item summary:focus-visible, .item input:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.how { font-size: 14.5px; color: var(--ink); margin-top: 8px; display: flex; flex-direction: column; gap: 6px; max-width: 64ch; }
+.how ul, .how ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 1px 7px; border-radius: 4px; margin-left: 6px; vertical-align: 2px; }
+.tag.cond { background: var(--warn-soft); color: var(--warn); }
+.tag.key { background: var(--accent-soft); color: var(--accent); }
+
+.months { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.month { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; cursor: pointer; }
+.month input { width: 20px; height: 20px; accent-color: var(--accent); margin: 0; cursor: pointer; }
+.month span { font-size: 14px; }
+.month small { display: block; color: var(--muted); font-size: 12px; }
+.month.done { border-color: var(--accent); background: var(--accent-soft); }
+
+.callout { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 14.5px; }
+.year-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.year-nav button { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.year-nav button:hover { border-color: var(--accent); }
+.year-nav .year { font-family: var(--f-display); font-size: 22px; font-weight: 700; min-width: 70px; text-align: center; }
+.year-nav .age { font-size: 13px; color: var(--muted); }
+
+.milestones { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.milestones li { display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); }
+.milestones li:first-child { border-top: 0; }
+.milestones .date { font-family: var(--f-mono); font-size: 13px; color: var(--chestnut); padding-top: 2px; }
+
+[hidden] { display: none !important; }
+section.tool { display: flex; flex-direction: column; gap: 16px; }
+.sim { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 18px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font-size: 13px; color: var(--muted); }
+.field .val { font-family: var(--f-mono); font-size: 15px; font-weight: 600; }
+.field input[type=range] { width: 100%; accent-color: var(--accent); }
+.results { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.res { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 2px; }
+.res .k { font-size: 12px; color: var(--muted); }
+.res .v { font-family: var(--f-mono); font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.res .s { font-size: 12px; color: var(--muted); }
+.res.main { border-color: var(--accent); background: var(--accent-soft); }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.rule { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.rule h3 { font-size: 16px; }
+.rule p { font-size: 14.5px; color: var(--muted); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.where-table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 520px; }
+.where-table th, .where-table td { text-align: left; padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+.where-table thead th { border-top: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+.where-table td:nth-child(2) { font-weight: 600; white-space: nowrap; }
+.where-table td:nth-child(3) { color: var(--muted); }
+.rule-table { min-width: 0; }
+.chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 18px; height: 0; border-top: 2px solid; }
+.chart-wrap { position: relative; }
+.chart-wrap svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+.chart-wrap .axis { fill: var(--muted); font-size: 12px; font-family: var(--f-body); font-variant-numeric: tabular-nums; }
+.chart-wrap .grid { stroke: var(--line); stroke-width: 1; }
+.chart-wrap .dlabel { font-size: 12px; font-family: var(--f-body); fill: var(--ink); }
+.chart-tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 13px; box-shadow: 0 4px 14px rgba(0,0,0,.12); min-width: 190px; }
+.chart-tip b { display: block; margin-bottom: 4px; }
+.chart-tip div { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+.proj-table td, .proj-table th { white-space: nowrap; }
+.proj-table tr.hl td { background: var(--accent-soft); }
+.sources { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.source-group { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.source-group h3 { font-size: 15px; }
+.source-group ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.source-group a { overflow-wrap: anywhere; }
+.sum-steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 10px; }
+.sum-steps li { counter-increment: s; position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 12px 52px; font-size: 15px; }
+.sum-steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--surface); font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+.sum-steps .when-tag { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--chestnut); font-weight: 600; margin-bottom: 2px; }
+.tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.tabs button { font: inherit; font-weight: 600; font-size: 15px; background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted); padding: 10px 14px; cursor: pointer; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs button:hover { color: var(--ink); }
+.tabs button[data-tab="parents"] { margin-left: 0; color: var(--chestnut); }
+.tabs button[data-tab="parents"][aria-selected="true"] { border-bottom-color: var(--chestnut); color: var(--ink); }
+@media (max-width: 560px) { .tabs button[data-tab="parents"] { margin-left: 0; } }
+footer { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--line); padding-top: 18px; }
+@media (prefers-reduced-motion: reduce) { .bar > span { transition: none; } }
+@media (max-width: 480px) { .milestones li { grid-template-columns: 1fr; gap: 2px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <p style="margin:0 0 8px"><a href="../" style="color:var(--chestnut)">← Mes sites</a></p>
+  <header>
+    <span class="eyebrow">Investissement et retraite</span>
+    <h1 id="page-title">Plan retraite du foyer</h1>
+    <p class="lede" id="lede"></p>
+        <div class="progress-card" aria-live="polite" data-only="invest mdph parents">
+      <div class="progress-row">
+        <strong>Progression</strong>
+        <span class="num" id="pct">0 %</span>
+      </div>
+      <div class="bar"><span id="bar"></span></div>
+      <p class="next" id="next"></p>
+      <p class="sync" id="sync">Chargement de votre progression…</p>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Rubriques">
+    <button type="button" role="tab" data-tab="parents" aria-selected="true">Mon plan</button>
+    <button type="button" role="tab" data-tab="compare" aria-selected="false">Infos / Où faire</button>
+  </nav>
+
+
+
+
+
+  <section class="tool" aria-labelledby="where-m-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Récapitulatif · 100 000 € d'héritage + 800 à 1 500 €/mois, la cinquantaine</span>
+      <h2 id="where-m-title">Où faire quoi</h2>
+      <p class="phase-intro">La stratégie qui donne la plus grosse somme à 65 ans sans risque excessif : <b>80 % en actions jusqu'à 60 ans</b>, puis on sécurise progressivement jusqu'à environ 50 % d'actions à 65 ans. Montants donnés pour le cas où ils ont déjà une épargne de précaution (sinon, garder 10 000 € de côté).</p>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table">
+        <thead><tr><th scope="col">Quoi</th><th scope="col">Où</th><th scope="col">Combien (exemple)</th></tr></thead>
+        <tbody>
+          <tr><td>Épargne de précaution (si elle n'existe pas déjà)</td><td>Leur banque : Livret A, LDDS</td><td>10 000 €, à retirer du placé</td></tr>
+          <tr><td>Héritage · PEA au nom de la personne qui a hérité, ETF Monde (WPEA)</td><td>Bourse Direct</td><td>60 000 €, investis sur 12 mois</td></tr>
+          <tr><td>Héritage · assurance-vie au nom de la personne qui a hérité : ETF Monde</td><td>Linxea Spirit 2</td><td>20 000 €, investis sur 12 mois</td></tr>
+          <tr><td>Héritage · même assurance-vie : fonds euros</td><td>Linxea Spirit 2</td><td>20 000 €, tout de suite</td></tr>
+          <tr><td>Épargne mensuelle · PEA au nom de son mari (WPEA)</td><td>Bourse Direct</td><td>80 % du versement : 640 à 1 200 €/mois</td></tr>
+          <tr><td>Épargne mensuelle · assurance-vie au nom de son mari : fonds euros</td><td>Linxea Spirit 2</td><td>20 % du versement : 160 à 300 €/mois</td></tr>
+          <tr><td>PER</td><td>Linxea Spirit PER, seulement si tranche d'impôt ≥ 30 %</td><td>Une partie des versements mensuels (environ +18 000 € à 65 ans)</td></tr>
+          <tr><td>Produits proposés par la banque</td><td>Nulle part</td><td>Frais d'entrée et de gestion trop élevés</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tool" aria-labelledby="graph-m-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Simulation · 100 000 € placés, versements de juin 2027 à 65 ans</span>
+      <h2 id="graph-m-title">Capital à 65 ans selon le versement mensuel</h2>
+      <p class="phase-intro">Euros d'aujourd'hui, avant prélèvements sociaux sur les gains (environ −7 %). Actions à 5 %/an et fonds euros à 1,3 %/an après inflation, rééquilibrage chaque année. Projections, pas garanties. Survolez le graphique pour voir les montants.</p>
+    </div>
+    <div class="chart-card">
+      <div class="legend" aria-hidden="true">
+        <span><i style="border-color: var(--s1)"></i>Glissant 80 → 50 % (proposé)</span>
+        <span><i style="border-color: var(--s1); border-top-style: dashed"></i>Glissant, si krach −35 % juste avant 65 ans</span>
+        <span><i style="border-color: var(--s2)"></i>100 % actions</span>
+        <span><i style="border-color: var(--s3)"></i>Prudent 40 %</span>
+      </div>
+      <div class="chart-wrap" id="proj-chart"></div>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table rule-table proj-table">
+        <thead><tr><th scope="col">Par mois</th><th scope="col">Total versé</th><th scope="col">Prudent 40 %</th><th scope="col">Équilibré 60 %</th><th scope="col">Dynamique 75 %</th><th scope="col">100 % actions</th><th scope="col">Glissant ★</th><th scope="col">Glissant si krach</th><th scope="col">Revenu sur 25 ans (glissant)</th></tr></thead>
+        <tbody id="proj-body"></tbody>
+      </table>
+    </div>
+    <p class="phase-intro">Chaque 100 € par mois en plus ajoute environ 17 000 € à 65 ans (stratégie glissante), soit environ 80 € par mois de revenu en plus pendant 25 ans. Le revenu suppose de consommer le capital sur 25 ans à 3 %/an.</p>
+  </section>
+
+  <section class="tool" aria-labelledby="rules-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">À relire en cas de doute</span>
+      <h2 id="rules-title">Les règles du plan</h2>
+    </div>
+    <div class="rules">
+      <div class="rule"><h3>Quand la bourse chute</h3><p>Une baisse de 30 à 50 % peut arriver avant la retraite. On ne vend rien et on continue les versements : on achète moins cher.</p></div>
+      <div class="rule"><h3>Un seul ETF</h3><p>Un ETF Monde (WPEA dans les PEA), c'est tout. Pas d'actions individuelles, pas de crypto, pas de « bon plan » vu sur les réseaux.</p></div>
+      <div class="rule"><h3>Le matelas d'abord</h3><p>S'il sert pour un imprévu, on le reconstitue avant de réinvestir. C'est lui qui évite de vendre au mauvais moment.</p></div>
+      <div class="rule"><h3>Les frais comptent</h3><p>0,5 % de frais en plus par an coûte des dizaines de milliers d'euros. On refuse les produits de placement de la banque.</p></div>
+      <div class="rule"><h3>Pas de timing</h3><p>N'attendez jamais « le bon moment » pour investir. Le calendrier fixé ici remplace toutes les prévisions.</p></div>
+      <div class="rule"><h3>On ne retire pas</h3><p>PEA et assurances-vie restent intacts jusqu'à la retraite. Les projets se financent avec le matelas et l'épargne courante.</p></div>
+    </div>
+  </section>
+
+  <section class="tool" aria-labelledby="proj-m-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Simulation</span>
+      <h2 id="proj-m-title">À 65 ans : quelle stratégie rapporte le plus</h2>
+      <p class="phase-intro">Hypothèses : la cinquantaine, 100 000 € placés (part actions étalée sur 12 mois), versements mensuels de juin 2027 à leurs 65 ans (vers octobre 2038), rééquilibrage chaque année. Euros d'aujourd'hui : actions à 5 %/an et fonds euros à 1,3 %/an après inflation. Projections, pas garanties.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table rule-table">
+        <thead><tr><th scope="col">Stratégie</th><th scope="col">800 €/mois</th><th scope="col">1 000 €</th><th scope="col">1 200 €</th><th scope="col">1 500 €</th><th scope="col">Krach −35 % juste avant 65 ans (1 500 €)</th></tr></thead>
+        <tbody>
+          <tr><td>Prudent (40 % actions)</td><td class="num">266 000 €</td><td class="num">298 000 €</td><td class="num">330 000 €</td><td class="num">378 000 €</td><td class="num">326 000 €</td></tr>
+          <tr><td>Équilibré (60 %)</td><td class="num">283 000 €</td><td class="num">317 000 €</td><td class="num">350 000 €</td><td class="num">401 000 €</td><td class="num">317 000 €</td></tr>
+          <tr><td>Dynamique (75 %)</td><td class="num">297 000 €</td><td class="num">332 000 €</td><td class="num">366 000 €</td><td class="num">418 000 €</td><td class="num">310 000 €</td></tr>
+          <tr><td>100 % actions</td><td class="num">321 000 €</td><td class="num">358 000 €</td><td class="num">394 000 €</td><td class="num">449 000 €</td><td class="num">295 000 €</td></tr>
+          <tr><td><b>Glissant 80 → 50 % (proposé)</b></td><td class="num"><b>296 000 €</b></td><td class="num"><b>330 000 €</b></td><td class="num"><b>364 000 €</b></td><td class="num"><b>416 000 €</b></td><td class="num"><b>335 000 €</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="phase-intro">
+      <li><b>Le levier n°1 est le versement mensuel</b> : passer de 800 à 1 500 € ajoute environ 120 000 €.</li>
+      <li><b>Le levier n°2 est la part d'actions</b> : le 100 % actions rapporte le plus en moyenne, mais un krach juste avant 65 ans le fait tomber sous toutes les autres stratégies. Le glissant 80 → 50 % garde presque tout le gain et résiste le mieux.</li>
+      <li><b>PER si tranche d'impôt ≥ 30 %</b> : mettre 500 € des 1 500 € sur un PER, avec l'économie d'impôt réinvestie, ajoute environ 18 000 € net à 65 ans.</li>
+      <li>Tout investir d'un coup plutôt que sur 12 mois : environ +3 000 € seulement. Garder 10 000 € de précaution : environ −16 000 €.</li>
+    </ul>
+    <p class="phase-intro">Les tableaux ci-dessous datent du premier plan (répartition 60 %, fonds euros à 0,8 %/an) : ils restent valables pour comparer les versements.</p>
+    <h3>Combien placer sur les 100 000 € ?</h3>
+    <div class="table-wrap">
+      <table class="where-table rule-table">
+        <thead><tr><th scope="col">Situation</th><th scope="col">Gardé disponible</th><th scope="col">Placé</th><th scope="col">Répartition du placé</th></tr></thead>
+        <tbody>
+          <tr><td>Ils n'ont pas d'épargne de précaution</td><td>10 000 € (Livret A, LDDS)</td><td><b>90 000 €</b></td><td>35 000 € PEA, 30 000 € fonds euros, 25 000 € ETF en assurance-vie</td></tr>
+          <tr><td>Ils ont déjà 3 à 6 mois de dépenses de côté</td><td>0 €</td><td><b>100 000 €</b></td><td>39 000 € PEA, 33 000 € fonds euros, 28 000 € ETF en assurance-vie</td></tr>
+          <tr><td>Un projet prévu dans les 5 ans (voiture, travaux)</td><td>le montant du projet</td><td>le reste</td><td>Même proportions : environ 60 % actions, 40 % sûr</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Capital à 65 ans selon le versement mensuel (équilibré, actions à 5 %)</h3>
+    <div class="table-wrap">
+      <table class="where-table rule-table">
+        <thead><tr><th scope="col">Versement mensuel</th><th scope="col">Avec 90 000 € placés</th><th scope="col">Avec 100 000 € placés</th><th scope="col">Revenu sur 25 ans (100 000 €)</th></tr></thead>
+        <tbody>
+          <tr><td>0 €</td><td class="num">≈ 134 000 €</td><td class="num">≈ 149 000 €</td><td class="num">≈ 710 €/mois</td></tr>
+          <tr><td>500 €</td><td class="num">≈ 218 000 €</td><td class="num">≈ 233 000 €</td><td class="num">≈ 1 110 €/mois</td></tr>
+          <tr><td><b>800 €</b></td><td class="num"><b>≈ 268 000 €</b></td><td class="num"><b>≈ 283 000 €</b></td><td class="num"><b>≈ 1 350 €/mois</b></td></tr>
+          <tr><td>1 000 €</td><td class="num">≈ 301 000 €</td><td class="num">≈ 316 000 €</td><td class="num">≈ 1 510 €/mois</td></tr>
+          <tr><td>1 200 €</td><td class="num">≈ 335 000 €</td><td class="num">≈ 349 000 €</td><td class="num">≈ 1 670 €/mois</td></tr>
+          <tr><td>1 500 €</td><td class="num">≈ 385 000 €</td><td class="num">≈ 400 000 €</td><td class="num">≈ 1 910 €/mois</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="phase-intro">Chaque 100 € par mois en plus ajoute environ 16 700 € à 65 ans, soit environ 80 € par mois de revenu en plus. Placer les 10 000 € de précaution en plus ajoute environ 15 000 €, à condition d'avoir déjà une réserve ailleurs.</p>
+    <h3>Selon le profil de risque (90 000 € placés, 800 €/mois)</h3>
+    <div class="table-wrap">
+      <table class="where-table rule-table">
+        <thead><tr><th scope="col">Profil</th><th scope="col">Actions à 4 %</th><th scope="col">Actions à 5 %</th><th scope="col">Actions à 6 %</th><th scope="col">Revenu sur 25 ans (5 %)</th></tr></thead>
+        <tbody>
+          <tr><td>Prudent (40 % actions)</td><td class="num">≈ 240 000 €</td><td class="num">≈ 250 000 €</td><td class="num">≈ 261 000 €</td><td class="num">≈ 1 195 €/mois</td></tr>
+          <tr><td><b>Équilibré (60 %)</b></td><td class="num">≈ 253 000 €</td><td class="num"><b>≈ 268 000 €</b></td><td class="num">≈ 284 000 €</td><td class="num"><b>≈ 1 280 €/mois</b></td></tr>
+          <tr><td>Dynamique (75 %)</td><td class="num">≈ 263 000 €</td><td class="num">≈ 281 000 €</td><td class="num">≈ 302 000 €</td><td class="num">≈ 1 345 €/mois</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="phase-intro">Sur ≈ 268 000 € (équilibré, 5 %), elle aura versé 199 600 € : environ 68 000 € viennent des intérêts composés. Sans les 800 € par mois, le capital serait d'environ 134 000 €. Le revenu suppose de consommer le capital sur 25 ans, à 3 %/an. Les 10 000 € d'épargne de précaution ne sont pas comptés.</p>
+  </section>
+
+  <section class="tool" aria-labelledby="cmp-av-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Classement · gestion libre en ETF, long terme</span>
+      <h2 id="cmp-av-title">Assurances-vie</h2>
+      <p class="phase-intro">Classées pour l'usage du plan : investir soi-même en ETF avec le moins de frais possible, plus un bon fonds euros. Les rendements de fonds euros sont ceux de 2025, nets de frais de gestion. « n.c. » : chiffre non trouvé de façon fiable.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table">
+        <thead><tr><th scope="col">#</th><th scope="col">Contrat</th><th scope="col">Frais versement</th><th scope="col">Frais/an ETF</th><th scope="col">Fonds euros 2025</th><th scope="col">À retenir</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Linxea Spirit 2</td><td>0 %</td><td>0,50 %</td><td>3,08 – 3,26 %</td><td>Choix du plan. 500 € minimum, versements programmés dès 100 €. Fonds euros garanti à 98 %.</td></tr>
+          <tr><td>2</td><td>Lucya Cardif</td><td>0 %</td><td>0,50 %</td><td>≈ 2,75 – 2,85 %</td><td>Très large choix de supports. 500 € minimum.</td></tr>
+          <tr><td>3</td><td>Placement-direct Vie</td><td>0 %</td><td>0,50 – 0,60 %</td><td>≈ 3,00 %</td><td>Bonne alternative, chiffres de frais variables selon les comparatifs.</td></tr>
+          <tr><td>4</td><td>BoursoBank Vie</td><td>0 %</td><td>0,75 %</td><td>3,21 %</td><td>Bon fonds euros, frais ETF plus élevés.</td></tr>
+          <tr><td>★</td><td>La France Mutualiste · Actépargne 2</td><td>0 %</td><td>0,77 % (gestion)</td><td><b>3,50 %</b></td><td>Meilleur fonds euros du tableau, sans obligation de prendre des unités de compte. Mais choix d'unités de compte limité, aucun ETF confirmé, arbitrages à 0,45 %. Idéal pour la partie « sûre », pas pour la partie ETF.</td></tr>
+          <tr><td>5</td><td>Altaprofits Vie</td><td>0 %</td><td>0,60 %</td><td>n.c.</td><td>0,45 % au-delà de 300 000 €.</td></tr>
+          <tr><td>6</td><td>Fortuneo Vie</td><td>0 %</td><td>0,60 – 0,75 %</td><td>n.c.</td><td>Correct, sans avantage particulier.</td></tr>
+          <tr><td>7</td><td>Linxea Avenir 2</td><td>0 %</td><td>n.c.</td><td>2,10 – 3,00 %</td><td>Fonds euros selon le support choisi.</td></tr>
+          <tr><td>8</td><td>Gestion pilotée (Ramify, Nalo, Yomoni)</td><td>0 %</td><td>≈ 1 – 1,6 % au total</td><td>variable</td><td>On paie pour déléguer : 2 à 3 fois plus cher que la gestion libre.</td></tr>
+          <tr><td>9</td><td>Banques traditionnelles (Crédit Agricole, BNP, SG, La Banque Postale…)</td><td>souvent payants</td><td>souvent ≥ 0,8 %</td><td>≈ 2,15 – 2,90 %</td><td>À éviter : fonds euros plus faibles (moyenne du marché 2,6 %) et frais plus élevés.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tool" aria-labelledby="cmp-fe-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Classement · argent sûr (fonds euros)</span>
+      <h2 id="cmp-fe-title">Meilleurs fonds euros 2025</h2>
+      <p class="phase-intro">Pour la partie sans risque (utile surtout pour la personne qui a hérité). Les mutuelles et associations servent souvent plus que les assureurs en ligne, mais ont parfois des frais sur versement : 2 % de frais d'entrée effacent plus de 7 mois de rendement.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table">
+        <thead><tr><th scope="col">#</th><th scope="col">Contrat</th><th scope="col">Fonds euros 2025</th><th scope="col">Frais versement</th><th scope="col">À retenir</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Carac Épargne Patrimoine (mutuelle)</td><td><b>3,55 %</b></td><td>0 %</td><td>Sans obligation d'unités de compte. 500 € minimum, versements réguliers dès 50 €/mois. Attention : l'ancien contrat Carac Profiléo, lui, avait jusqu'à 3,5 % de frais.</td></tr>
+          <tr><td>2</td><td>La France Mutualiste · Actépargne 2</td><td>3,50 %</td><td>0 %</td><td>Sans obligation d'unités de compte. Frais d'arbitrage 0,45 %.</td></tr>
+          <tr><td>3</td><td>Garance Épargne (mutuelle)</td><td>3,50 %</td><td>jusqu'à 1 %</td><td>Taux stable depuis 2023.</td></tr>
+          <tr><td>4</td><td>MIF · Ampli Grain 9</td><td>3,45 %</td><td>≈ 2 % (MIF)</td><td>Bon taux, mais frais d'entrée.</td></tr>
+          <tr><td>5</td><td>BoursoBank Vie · Euro Exclusif</td><td>3,21 %</td><td>0 %</td><td>Bon compromis tout en ligne.</td></tr>
+          <tr><td>6</td><td>Linxea Spirit 2</td><td>3,08 – 3,26 %</td><td>0 %</td><td>Un peu moins bon sur le fonds euros, mais le meilleur pour les ETF : un seul contrat pour tout.</td></tr>
+          <tr><td>7</td><td>Afer (association)</td><td>2,65 %</td><td>n.c.</td><td>Nouveau fonds Euro Génération à 4,05 % la première année, sous conditions.</td></tr>
+          <tr><td>—</td><td>Moyenne du marché</td><td>≈ 2,6 %</td><td>—</td><td>Asac-Fapes 2,2 – 2,3 % (bonus si unités de compte) ; banques traditionnelles 2,15 – 2,9 %.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tool" aria-labelledby="cmp-etf-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Classement · ETF monde éligibles au PEA</span>
+      <h2 id="cmp-etf-title">Quel ETF choisir</h2>
+      <p class="phase-intro">Un seul ETF suffit. Ajouter un S&amp;P 500 ou un Nasdaq à un MSCI World crée surtout des doublons (les États-Unis pèsent déjà environ 72 % du World).</p>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table">
+        <thead><tr><th scope="col">#</th><th scope="col">ETF</th><th scope="col">Frais/an</th><th scope="col">Couvre</th><th scope="col">À retenir</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>iShares MSCI World Swap PEA (WPEA) · IE0002XZSHO1</td><td>0,20 %</td><td>23 pays développés</td><td>Choix des plans : le moins cher, gros encours.</td></tr>
+          <tr><td>1</td><td>Amundi PEA Monde (DCAM) · FR001400U5Q4</td><td>0,20 %</td><td>23 pays développés</td><td>Équivalent au WPEA.</td></tr>
+          <tr><td>3</td><td>Amundi PEA Global MSCI ACWI (GPEA) · FR0014017NX3</td><td>0,30 %</td><td>Développés + émergents (≈ 12 %)</td><td>Lancé en juillet 2026, encore petit (≈ 86 M€). Alternative valable pour avoir les émergents en une ligne, 0,10 %/an plus cher. Ne pas vendre un World pour y passer.</td></tr>
+          <tr><td>4</td><td>Amundi MSCI World (CW8)</td><td>0,38 %</td><td>23 pays développés</td><td>Plus cher : à garder si déjà détenu, nouveaux achats en WPEA ou DCAM.</td></tr>
+          <tr><td>—</td><td>S&amp;P 500, Nasdaq, Nasdaq ×2, secteurs (énergie…)</td><td>variable</td><td>Une partie du marché</td><td>Pari sur un pays ou un secteur, ou levier : hors plan, risque plus élevé.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tool" aria-labelledby="cmp-pea-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Classement · achats mensuels d'ETF</span>
+      <h2 id="cmp-pea-title">Courtiers PEA</h2>
+      <p class="phase-intro">Les frais annuels de l'ETF (0,20 % pour WPEA ou DCAM) sont les mêmes partout ; seuls les frais d'achat et de tenue de compte changent.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table">
+        <thead><tr><th scope="col">#</th><th scope="col">Courtier</th><th scope="col">Achat mensuel de 250 €</th><th scope="col">Gros ordre</th><th scope="col">À retenir</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Bourse Direct</td><td>0 € (investissement programmé)</td><td>Grille dégressive</td><td>Choix du plan : achats automatiques sur ETF sans frais ni minimum depuis mai 2026. Courtier français.</td></tr>
+          <tr><td>2</td><td>BoursoBank</td><td>1,99 €</td><td>0 € sur WPEA dès 500 €</td><td>Le plus cité sur Reddit. Idéal si on achète par ordres d'au moins 500 €.</td></tr>
+          <tr><td>3</td><td>Saxo</td><td>2 € (0,08 %, minimum 2 €)</td><td>0,08 %</td><td>Promotion sur des ETF Amundi jusqu'à fin 2026.</td></tr>
+          <tr><td>★</td><td>XTB</td><td>0 € (ordre manuel)</td><td>0 € jusqu'à 100 000 €/mois</td><td>Pas d'investissement automatique : il faut passer l'ordre chaque mois. Courtier étranger.</td></tr>
+          <tr><td>4</td><td>Fortuneo</td><td>≈ 0,35 – 0,5 %</td><td>Forfaits</td><td>Le 1er ordre mensuel n'est plus gratuit depuis 2025.</td></tr>
+          <tr><td>5</td><td>Trade Republic</td><td>0 € (plan programmé)</td><td>1 €</td><td>Le moins cher, mais courtier étranger : pas de déclaration fiscale pré-remplie, service client et transferts de PEA critiqués.</td></tr>
+          <tr><td>6</td><td>Interactive Brokers</td><td>1,25 € minimum</td><td>0,05 %</td><td>Pour gros montants et investisseurs avertis ; déclaration fiscale à faire soi-même.</td></tr>
+          <tr><td>7</td><td>Crédit Agricole (Investore)</td><td>Frais par ordre</td><td>Dégressif</td><td>À éviter : 96 €/an si peu d'ordres dans l'année.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tool" aria-labelledby="cmp-per-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Classement · seulement si tranche d'impôt ≥ 30 %</span>
+      <h2 id="cmp-per-title">PER individuels</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="where-table">
+        <thead><tr><th scope="col">#</th><th scope="col">Contrat</th><th scope="col">Frais/an ETF</th><th scope="col">Fonds euros 2025</th><th scope="col">À retenir</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Linxea Spirit PER</td><td>0,50 %</td><td>3,08 %</td><td>Le moins cher en gestion libre, très large choix.</td></tr>
+          <tr><td>2</td><td>Placement-direct PER</td><td>0,60 %</td><td>≈ 4,00 % (selon un comparatif)</td><td>Bonne alternative.</td></tr>
+          <tr><td>★</td><td>La France Mutualiste · PER'FORM</td><td>n.c.</td><td>4,00 %</td><td>Très bon fonds euros (chiffre de l'assureur) ; offre d'unités de compte à vérifier avant de choisir.</td></tr>
+          <tr><td>3</td><td>Ramify PER</td><td>≈ 1 – 1,4 % au total</td><td>fonds garanti à 70 %</td><td>Gestion pilotée.</td></tr>
+          <tr><td>4</td><td>Nalo PER</td><td>≈ 1,35 – 1,6 % au total</td><td>variable</td><td>Gestion pilotée.</td></tr>
+          <tr><td>5</td><td>Yomoni Retraite+</td><td>≈ 1,6 – 2,2 % au total</td><td>variable</td><td>Gestion pilotée, la plus chère des trois.</td></tr>
+          <tr><td>6</td><td>PER bancaires</td><td>élevés</td><td>variable</td><td>À éviter : frais d'entrée et de gestion importants.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="phase-intro">Livret A, LDDS et LEP : même taux dans toutes les banques (1,7 % et 2,5 %), inutile de comparer. Chiffres relevés en octobre 2026 dans des comparatifs, souvent publiés par des distributeurs : à revérifier sur le site de chaque établissement avant d'ouvrir.</p>
+  </section>
+
+  <section class="tool" aria-labelledby="src-title" data-only="compare">
+    <div class="phase-head">
+      <span class="eyebrow">Pour vérifier</span>
+      <h2 id="src-title">Sources</h2>
+      <p class="phase-intro">Les pages consultées pour construire les plans et les comparatifs (octobre 2026). Les sites officiels font foi ; les comparatifs sont souvent publiés par des distributeurs.</p>
+    </div>
+    <div class="sources">
+      <div class="source-group"><h3>Sites officiels</h3><ul>
+        <li><a href="https://www.service-public.gouv.fr/particuliers/vosdroits/F2367" target="_blank" rel="noopener">Service-public : livret d'épargne populaire (LEP)</a></li>
+        <li><a href="https://www.service-public.gouv.fr/particuliers/vosdroits/F2385" target="_blank" rel="noopener">Service-public : plan d'épargne en actions (PEA)</a></li>
+        <li><a href="https://www.amf-france.org/sites/institutionnel/files/pdf/59204/fr/Qu%27est-ce_que_%3C%3C_Epargne_Info_Service_%3E%3E_.pdf?1784373026" target="_blank" rel="noopener">AMF : Épargne Info Service</a></li>
+        <li><a href="https://www.lesclesdelabanque.com/particulier/placements-douteux-listes-noires-amf/" target="_blank" rel="noopener">Les clés de la banque : listes noires de l'AMF</a></li>
+      </ul></div>
+      <div class="source-group"><h3>Livrets et fiscalité 2026</h3><ul>
+        <li><a href="https://www.previssima.fr/actualite/livret-a-ldds-lep-le-point-sur-les-changements-au-1er-aout-2026.html" target="_blank" rel="noopener">Previssima : livrets au 1er août 2026</a></li>
+        <li><a href="https://placement.meilleurtaux.com/livret-epargne/actualites/2026-juillet/livrets-les-taux-officiels-au-1er-aout-2026.html" target="_blank" rel="noopener">Meilleurtaux : taux officiels des livrets</a></li>
+        <li><a href="https://www.france-epargne.fr/academy/epargne-retraite/prelevements-sociaux-per-taux-2026" target="_blank" rel="noopener">France Épargne : prélèvements sociaux 2026</a></li>
+        <li><a href="https://www.quechoisir.org/actualite-hausse-de-la-csg-vos-revenus-sont-ils-concernes-n173786/" target="_blank" rel="noopener">Que Choisir : hausse de la CSG</a></li>
+        <li><a href="https://patrimoine-pratique.fr/assurance-vie/augmentation-csg-assurance-vie-2026/" target="_blank" rel="noopener">Patrimoine Pratique : CSG et assurance-vie</a></li>
+        <li><a href="https://www.linxea.com/lexique/assurance-vie/assurance-vie-fiscalite-apres-8-ans/" target="_blank" rel="noopener">Linxea : fiscalité après 8 ans</a></li>
+        <li><a href="https://blog.nalo.fr/abattement-152-500-assurance-vie/" target="_blank" rel="noopener">Nalo : abattement de 152 500 €</a></li>
+        <li><a href="https://legare.fr/jurisprudence/assurance-vie-communaute-recompense/" target="_blank" rel="noopener">Legare : assurance-vie et communauté</a></li>
+      </ul></div>
+      <div class="source-group"><h3>ETF et courtiers PEA</h3><ul>
+        <li><a href="https://www.ishares.com/ch/professionals/en/products/335178/ishares-msci-world-swap-pea-ucits-etf" target="_blank" rel="noopener">iShares : fiche du WPEA</a></li>
+        <li><a href="https://www.francetransactions.com/actus/news-bourse/marches/etf-pea-ishares-blackrock-frais-gestion-baisse-wpea.html" target="_blank" rel="noopener">FranceTransactions : baisse des frais du WPEA</a></li>
+        <li><a href="https://dcatracker.fr/etf-eligibles-pea" target="_blank" rel="noopener">DCA Tracker : ETF éligibles au PEA</a></li>
+        <li><a href="https://groupe.boursedirect.fr/actualites/actualites/bourse-direct-lance-ses-plans-dinvestissement-programmes-sans-frais-sur-etf-a-partir-de-quelques-euros-disponibles-sur-pea-et-compte-titres-20260512" target="_blank" rel="noopener">Bourse Direct : investissements programmés (communiqué)</a></li>
+        <li><a href="https://pea.fr/avis/pea-boursobank-2026-avis-frais-boursomarkets-et-alternatives/" target="_blank" rel="noopener">PEA.fr : BoursoBank 2026</a></li>
+        <li><a href="https://www.l-investisseur-long-terme.fr/pea-fortuneo-avis/" target="_blank" rel="noopener">L'investisseur long terme : Fortuneo</a></li>
+        <li><a href="https://www.meilleur-pea.fr/" target="_blank" rel="noopener">Meilleur-pea.fr : comparatif de 25 courtiers</a></li>
+        <li><a href="https://www.cafedelabourse.com/bourse/comparatif-meilleur-pea" target="_blank" rel="noopener">Café de la Bourse : comparatif PEA</a></li>
+        <li><a href="https://investimieux.com/avis-pea-xtb/" target="_blank" rel="noopener">Investimieux : PEA XTB</a></li>
+        <li><a href="https://www.xtb.com/fr/analyses-marches/etf-synthetique-pea-le-gouvernement-fait-marche-arriere" target="_blank" rel="noopener">XTB : maintien des ETF synthétiques en PEA</a></li>
+        <li><a href="https://www.justetf.com/en/etf-profile.html?isin=FR0014017NX3" target="_blank" rel="noopener">justETF : Amundi PEA Global (ACWI)</a></li>
+        <li><a href="https://quentinarioli.fr/msci-acwi-etf-pea-enfin-disponible/" target="_blank" rel="noopener">Quentin Arioli : faut-il passer à l'ACWI ?</a></li>
+        <li><a href="https://x.com/FlasheurInvest/status/2075538308885614708" target="_blank" rel="noopener">Flasheur (X) : lancement de l'ETF ACWI PEA</a></li>
+      </ul></div>
+      <div class="source-group"><h3>Assurances-vie et fonds euros</h3><ul>
+        <li><a href="https://www.linxea.com/assurance-vie/linxea-spirit-2" target="_blank" rel="noopener">Linxea Spirit 2 (fiche officielle)</a></li>
+        <li><a href="https://cleerly.fr/assurance-vie/linxea-spirit-2" target="_blank" rel="noopener">Cleerly : avis Linxea Spirit 2</a></li>
+        <li><a href="https://www.carac.fr/nos-solutions-epargne-patrimoine/carac-epargne-patrimoine" target="_blank" rel="noopener">Carac Épargne Patrimoine (fiche officielle)</a></li>
+        <li><a href="https://placement.meilleurtaux.com/assurance-vie/actualites/2026-janvier/france-mutualiste-sert-3-5-fonds-euros.html" target="_blank" rel="noopener">Meilleurtaux : La France Mutualiste à 3,50 %</a></li>
+        <li><a href="https://finance-heros.fr/avis-assurance-vie/actepargne-2/" target="_blank" rel="noopener">Finance Héros : avis Actépargne 2</a></li>
+        <li><a href="https://www.moneyvox.fr/assurance-vie/actualites/106787/taux-assurance-vie-les-bons-et-mauvais-rendements-de-2025" target="_blank" rel="noopener">Moneyvox : rendements 2025</a></li>
+        <li><a href="https://www.mingzi.fr/mingzi-actualites/assurance-vie-taux-de-rendement-fonds-en-euros-les-meilleurs-taux/" target="_blank" rel="noopener">Mingzi : fonds euros contrat par contrat</a></li>
+        <li><a href="https://choisirmonassurancevie.com/comparatif/assurance-vie-mif-avis/" target="_blank" rel="noopener">Choisir mon assurance vie : MIF</a></li>
+        <li><a href="https://comparatif-assurances-vie.com/meilleure-assurance-vie" target="_blank" rel="noopener">Comparatif-assurances-vie.com : frais totaux</a></li>
+        <li><a href="https://www.goodvalueformoney.eu/produit/selection-sel0000692-ampli-assurance-vie-selection-2026" target="_blank" rel="noopener">Good Value for Money : labels 2026</a></li>
+      </ul></div>
+      <div class="source-group"><h3>PER</h3><ul>
+        <li><a href="https://www.ramify.fr/per/en-ligne" target="_blank" rel="noopener">Ramify : PER en ligne</a></li>
+        <li><a href="https://blog.nalo.fr/meilleur-per/" target="_blank" rel="noopener">Nalo : meilleur PER 2026</a></li>
+        <li><a href="https://get-gustav.com/meilleur-per/" target="_blank" rel="noopener">Get Gustav : 14 PER sans affiliation</a></li>
+        <li><a href="https://signal-alpha.fr/comparatif-chez-qui-prendre-son-per/" target="_blank" rel="noopener">Signal Alpha : comparatif PER</a></li>
+      </ul></div>
+      <div class="source-group"><h3>Données des communautés</h3><ul>
+        <li><a href="https://github.com/ArthurHeitmann/arctic_shift/blob/master/api/README.md" target="_blank" rel="noopener">Arctic Shift : archive publique de Reddit (122 000 posts, 97 600 commentaires analysés)</a></li>
+        <li><a href="https://community.finary.com/t/investissement-programme-sur-bourse-direct/35662" target="_blank" rel="noopener">Finary : investissement programmé Bourse Direct</a></li>
+        <li><a href="https://community.finary.com/t/dca-sur-pea-boursobank-besoin-de-retours-depuis-la-mise-a-jour-des-tarifs/33267" target="_blank" rel="noopener">Finary : DCA sur PEA BoursoBank</a></li>
+        <li><a href="https://forum.finance-heros.fr/t/investissement-programme-sur-pea/1515" target="_blank" rel="noopener">Forum Finance Héros : investissement programmé</a></li>
+        <li><a href="https://www.moneyvox.fr/forums/fil/les-rendements-de-2025-sur-les-fonds-euros-des-av.53430/" target="_blank" rel="noopener">Forum Moneyvox : rendements 2025</a></li>
+      </ul></div>
+    </div>
+  </section>
+
+  <div class="timeline" id="timeline"></div>
+
+
+
+  <footer>
+    <p>Synthèse éducative tirée de 122 000 discussions Reddit (r/vosfinances, r/VosSous, r/BourseFr, r/FranceFIRE…) et des règles en vigueur en octobre 2026. Ce n'est pas un conseil financier agréé : pour un avis personnalisé, un conseiller en investissements financiers (CIF) rémunéré par honoraires.</p>
+    <p>Taux et plafonds au 24 octobre 2026, à revérifier chaque année : Livret A et LDDS 1,7 % (depuis le 1er août 2026), LEP 2,5 %, prélèvements sociaux 18,6 % sur les gains du PEA et 17,2 % sur ceux de l'assurance-vie, flat tax 31,4 % hors enveloppes.</p>
+  </footer>
+</div>
+
+<script>
+const PLAN = [
+  {
+    id: "m0", tab: "parents", when: "Avant de placer", title: "Les vérifications",
+    intro: "Six points qui peuvent changer la répartition. Une heure de travail avec eux, avis d'impôt et relevés en main.",
+    items: [
+      { id: "m-propre", key: true, t: "Garder la trace que l'argent vient d'un héritage",
+        how: `<p>Mariés sous le régime légal (communauté), un héritage reste un <b>bien propre</b> de la personne qui a hérité. Pour le garder ainsi :</p><ul><li>conserver l'attestation du notaire qui montre le montant reçu ;</li><li>ouvrir les placements <b>à son nom</b> et les alimenter directement avec cet argent ;</li><li>si elle veut en donner une partie à son mari, c'est une donation entre époux : en parler au notaire de la succession, qui conseille gratuitement sur ce point lors du règlement.</li></ul>` },
+      { id: "m-dette", t: "Vérifier s'il reste un crédit, et à quel taux",
+        how: `<p>Un crédit à la consommation ou un crédit immobilier au-dessus d'environ 4 % : le rembourser en partie rapporte un gain sûr, souvent meilleur que les placements. Sous 2-3 %, on le garde et on place.</p>` },
+      { id: "m-precaution", t: "Vérifier l'épargne de précaution",
+        how: `<p>Il faut 3 à 6 mois de dépenses disponibles sur Livret A ou LDDS (1,7 %), ou sur LEP s'ils y ont droit (2,5 %, revenu fiscal de référence sous 35 326 € pour un couple). Si elle existe déjà, les 10 000 € prévus vont aux placements.</p>` },
+      { id: "m-retraite", t: "Noter leur date de départ prévue et consulter leurs relevés de carrière",
+        how: `<p>Sur info-retraite.fr, chacun voit ses trimestres et une estimation de pension. L'argent dont ils auront besoin dans les 5 à 8 ans doit rester en placements sûrs (fonds euros), pas en actions.</p>` },
+      { id: "m-tmi", t: "Lire leur tranche d'imposition sur l'avis d'impôt",
+        how: `<p>À 30 % ou plus, un PER alimenté avec leurs revenus réduit l'impôt chaque année ; à leur âge, l'argent n'y est bloqué que jusqu'à la retraite. À 0 ou 11 %, pas de PER.</p>` },
+      { id: "m-risque", key: true, t: "Choisir le niveau de risque avec eux",
+        how: `<p>La question qui décide : « si les 100 000 € tombaient à 75 000 € pendant un an, est-ce que vous tiendriez sans rien vendre ? »</p>
+<div class="table-wrap"><table class="where-table rule-table"><thead><tr><th scope="col">Stratégie</th><th scope="col">À 65 ans, 1 500 €/mois</th><th scope="col">Si krach −35 % juste avant 65 ans</th></tr></thead><tbody>
+<tr><td>Prudent (40 % actions)</td><td>≈ 378 000 €</td><td>≈ 326 000 €</td></tr>
+<tr><td>Équilibré (60 %)</td><td>≈ 401 000 €</td><td>≈ 317 000 €</td></tr>
+<tr><td>100 % actions</td><td>≈ 449 000 €</td><td>≈ 295 000 €</td></tr>
+<tr><td><b>Glissant 80 → 50 % (proposé)</b></td><td><b>≈ 416 000 €</b></td><td><b>≈ 335 000 €</b></td></tr>
+</tbody></table></div>
+<p>Le 100 % actions rapporte le plus en moyenne, mais un krach au mauvais moment fait perdre jusqu'à 150 000 €. La stratégie glissante garde presque tout le gain et résiste le mieux. Si le risque les inquiète, prendre « Prudent ».</p>
+<p class="muted">100 000 € placés, euros d'aujourd'hui, actions à 5 %/an et fonds euros à 1,3 %/an après inflation. Projections, pas garanties. Tableau complet dans l'onglet Infos / Où faire.</p>` },
+      { id: "m-banque", t: "Prévoir de dire non à la banque",
+        how: `<p>Après un héritage, la banque appelle presque toujours pour proposer son assurance-vie, son PER ou un placement « géré ». Frais d'entrée de 2 à 4 % et frais annuels élevés : sur 100 000 €, la différence se compte en dizaines de milliers d'euros. Réponse simple : « c'est déjà placé, merci ».</p>` },
+    ]
+  },
+  {
+    id: "m1", tab: "parents", when: "Mois 1", title: "Ouvrir les placements",
+    intro: "Tout s'ouvre en ligne, au nom de la personne qui a hérité puisque l'argent vient de son héritage.",
+    items: [
+      { id: "m-av", key: true, t: "Ouvrir son assurance-vie Linxea Spirit 2 et y verser 40 000 €",
+        how: `<ol><li>Souscription en ligne sur linxea.com : 0 % de frais sur versement, 0,50 %/an sur les ETF. Fonds euros à 3,08–3,26 % en 2025, garantis à 98 %.</li><li>Versement initial : 40 000 €. Tout de suite : 20 000 € restent sur le fonds euros. Les 20 000 € restants attendent aussi sur le fonds euros et basculent chaque mois vers l'ETF Monde.</li><li>Clause bénéficiaire : « mon conjoint, à défaut mes enfants, nés ou à naître, vivants ou représentés, par parts égales ».</li></ol>
+<p class="muted">Alternative équivalente : Lucya Cardif (Placement-direct), plus de choix de supports. Variante possible : mettre la partie sûre dans un contrat de mutuelle sans frais d'entrée, Carac Épargne Patrimoine (fonds euros à 3,55 % en 2025) ou La France Mutualiste (3,50 %). Mais garder tout chez Linxea permet de sécuriser gratuitement à partir de 60 ans (arbitrages ETF → fonds euros dans le même contrat) : c'est le choix le plus simple pour la stratégie glissante.</p>` },
+      { id: "m-pea", key: true, t: "Ouvrir son PEA chez Bourse Direct",
+        how: `<ol><li>Ouverture en ligne, versement de 60 000 € (plafond 150 000 €).</li><li>Investissement programmé mensuel en <b>WPEA</b> (ISIN IE0002XZSHO1, 0,20 %/an), sans frais.</li><li>Les 5 ans du PEA tombent vers 58 ans : ensuite, les gains ne paient plus d'impôt sur le revenu (prélèvements sociaux 18,6 %).</li></ol>` },
+      { id: "m-mari", key: true, t: "Ouvrir un PEA au nom de son mari pour les 800 € mensuels",
+        how: `<p>Règle simple pour ne pas mélanger : <b>l'héritage</b> va sur les comptes de la personne qui a hérité, <b>l'épargne des salaires</b> (les 800 € par mois, argent commun du couple) va sur des comptes séparés.</p>
+<ul><li>Son mari ouvre un PEA chez Bourse Direct (100 € suffisent, ça lance son compteur de 5 ans, vers 60 ans).</li><li>Chaque mois jusqu'à 60 ans : 80 % du versement en investissement programmé WPEA sur ce PEA (640 € sur 800 €, 1 200 € sur 1 500 €), et 20 % en fonds euros sur une assurance-vie Linxea à son nom.</li><li>Cette assurance-vie à son nom a un autre avantage : chaque enfant pourra alors recevoir jusqu'à 152 500 € de chacun des deux parents sans droits.</li></ul>
+<p class="muted">Le résultat chiffré est le même : seul le nom sur le compte change. Mais la séparation évite de mélanger un bien propre (l'héritage) et des fonds communs, ce qui compliquerait les comptes en cas de succession ou de séparation.</p>` },
+      { id: "m-per", cond: "si tranche ≥ 30 %", t: "Ouvrir un PER en ligne et l'alimenter avec leurs revenus",
+        how: `<p>Par exemple 200 à 500 € par mois, déductibles du revenu imposable dans la limite du plafond indiqué sur leur avis d'impôt. Bloqué jusqu'à la retraite (sauf achat de résidence principale). Pas avec l'héritage : il est plus utile en PEA et assurance-vie, disponibles à tout moment.</p>` },
+    ]
+  },
+  {
+    id: "m2", tab: "parents", when: "Mois 1 à 12", title: "Investir la partie actions progressivement",
+    intro: "80 000 € de l'héritage à mettre en actions, étalés sur 12 mois pour ne pas tout investir la veille d'une baisse : 5 000 € par mois dans le PEA de la personne qui a hérité et environ 1 700 € par mois de son assurance-vie vers l'ETF Monde. Tout investir d'un coup rapporterait à peine plus (environ 3 000 €) : l'étalement est un bon compromis.",
+    months: { prefix: "m-mois", label: "≈ 6 700 € investis", list: ["Mois 1","Mois 2","Mois 3","Mois 4","Mois 5","Mois 6","Mois 7","Mois 8","Mois 9","Mois 10","Mois 11","Mois 12"] },
+    items: [
+      { id: "m-arbitrage", t: "Programmer le passage mensuel fonds euros → ETF dans l'assurance-vie",
+        how: `<p>Linxea propose des arbitrages programmés gratuits : environ 1 700 € par mois du fonds euros vers un ETF MSCI World, pendant 12 mois. Dans le PEA, l'investissement programmé fait la même chose.</p>` },
+      { id: "m-calme", t: "Règle : ne rien changer si la bourse baisse pendant ces 12 mois",
+        how: `<p>Une baisse pendant l'étalement est une bonne nouvelle : les achats suivants se font moins cher. On garde le calendrier.</p>` },
+    ]
+  },
+  {
+    id: "m3", tab: "parents", when: "Ensuite, jusqu'à la retraite et au-delà", title: "Laisser travailler, puis sécuriser",
+    intro: "Une revue par an suffit. Les grandes dates changent la façon de retirer l'argent.",
+    items: [
+      { id: "m-revue", t: "Une fois par an : remettre la répartition à la cible (80 % actions jusqu'à 60 ans)",
+        how: `<p>Si les actions ont beaucoup monté ou baissé, on rééquilibre dans les assurances-vie (arbitrage gratuit entre ETF et fonds euros, sans impôt à l'intérieur du contrat).</p>` },
+      { id: "m-secu", key: true, t: "De 60 à 65 ans (2033 → 2038) : sécuriser progressivement jusqu'à 50 % d'actions",
+        how: `<ol><li>Dès 60 ans, tous les versements mensuels vont sur le fonds euros (plus sur le PEA).</li><li>Chaque année, basculer environ 6 % du total des ETF vers le fonds euros : arbitrage gratuit dans les assurances-vie Linxea, ou retrait partiel du PEA (après 5 ans : seuls les prélèvements sociaux sur la part de gains).</li><li>Objectif : environ 70 % d'actions à 61 ans, 60 % à 63 ans, 50 % à 65 ans.</li></ol>
+<p class="muted">C'est ce qui protège d'un krach juste avant la retraite. Si la bourse est en forte baisse une année, on décale la bascule de cette année-là plutôt que de vendre au plus bas.</p>` },
+      { id: "m-8ans", t: "Après 8 ans (vers 2035) : retraits de l'assurance-vie avec l'abattement",
+        how: `<p>Chaque année, les gains retirés ne paient pas d'impôt sur le revenu jusqu'à 9 200 € pour un couple marié (puis 7,5 %). Les prélèvements sociaux de l'assurance-vie restent à 17,2 %. C'est la source idéale pour compléter la retraite.</p>` },
+      { id: "m-transmission", t: "Comprendre ce que l'assurance-vie transmet",
+        how: `<ul><li>Le conjoint ne paie aucun droit de succession.</li><li>Pour les sommes versées avant 70 ans, chaque enfant bénéficiaire reçoit jusqu'à 152 500 € sans droits, en dehors de la succession.</li><li>D'où l'intérêt de faire les versements maintenant, bien avant 70 ans.</li></ul>` },
+    ]
+  }
+];
+
+const MILESTONES = [];
+
+const ANNUAL = [];
+const YEAR_MIN = 2027, YEAR_MAX = 2062, BIRTH = 1998;
+
+/* ---------- état : db partagé si dispo, sinon cet appareil ---------- */
+const state = {};           // id -> {done, at}
+let db = null, mode = "local";
+const LS = "plan-heritage-checks";
+function loadLocal() { try { Object.assign(state, JSON.parse(localStorage.getItem(LS) || "{}")); } catch (e) {} }
+function saveLocal() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+
+async function toggle(id, done) {
+  const entry = done ? { done: true, at: new Date().toISOString() } : { done: false };
+  state[id] = entry;
+  render();
+  if (mode === "db") {
+    try { await db.doc("checks/" + id).set(entry); }
+    catch (e) {
+      if (e && (e.code === "invalid_argument" || e.code === "not_granted")) { mode = "local"; setSync(); }
+      saveLocal();
+    }
+  } else saveLocal();
+}
+
+function setSync() {
+  const el = document.getElementById("sync");
+  if (mode === "db") { el.textContent = "Progression enregistrée en ligne : vous la retrouvez sur tous vos appareils."; el.className = "sync"; }
+  else { el.textContent = "Progression enregistrée sur cet appareil uniquement."; el.className = "sync warn"; }
+}
+
+/* ---------- rendu ---------- */
+const fmtDate = iso => { try { return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return ""; } };
+const isDone = id => !!(state[id] && state[id].done);
+let year = Math.min(Math.max(new Date().getFullYear() + (new Date().getMonth() >= 10 ? 1 : 0), YEAR_MIN), YEAR_MAX);
+
+let tab = "parents";
+const TABS = ["parents", "compare"];
+try {
+  const h = location.hash === "#mere" ? "parents" : location.hash.slice(1);
+  const saved = localStorage.getItem("plan-heritage-tab");
+  tab = TABS.includes(h) ? h : (TABS.includes(saved) ? saved : "parents");
+} catch (e) {}
+const LEDE = document.getElementById("lede").innerHTML;
+const COMPARE_LEDE = "Où placer quoi, les simulations et les comparatifs qui justifient le plan. Rien à cocher ici : les actions à faire sont dans « Mon plan ».";
+const PARENTS_LEDE = "Un plan séparé pour placer 100&nbsp;000&nbsp;€ d'héritage et 800 à 1&nbsp;500&nbsp;€ par mois dans la cinquantaine, avec 12 ans avant 65 ans puis 25 ans ou plus de retraite. Cochez chaque étape quand elle est faite : votre progression reste enregistrée sur cet appareil.";
+const phasesFor = () => PLAN.filter(p => (p.tab || "invest") === tab);
+
+function allIds() {
+  const ids = [];
+  phasesFor().forEach(p => { p.items.forEach(i => ids.push(i.id)); if (p.months) p.months.list.forEach((_, k) => ids.push(p.months.prefix + "-" + k)); });
+  if (tab === "invest") MILESTONES.forEach(m => ids.push(m.id));
+  return ids;
+}
+function firstOpen() {
+  for (const p of phasesFor()) {
+    for (const i of p.items) if (!isDone(i.id)) return { phase: p, label: i.t };
+    if (p.months) for (let k = 0; k < p.months.list.length; k++) if (!isDone(p.months.prefix + "-" + k)) return { phase: p, label: "Versement " + p.months.list[k] + " (" + p.months.label + ")" };
+  }
+  if (tab === "invest") for (const m of MILESTONES) if (!isDone(m.id)) return { phase: { when: m.date }, label: m.t };
+  return null;
+}
+
+function itemHTML(i) {
+  const d = isDone(i.id), at = d && state[i.id].at ? fmtDate(state[i.id].at) : "";
+  return `<li class="item${d ? " done" : ""}"><div class="item-row">
+    <input type="checkbox" id="c-${i.id}" data-id="${i.id}"${d ? " checked" : ""}>
+    <div><label for="c-${i.id}">${i.t}${i.key ? '<span class="tag key">clé</span>' : ""}${i.cond ? `<span class="tag cond">${i.cond}</span>` : ""}</label>
+    ${at ? `<div class="when">Fait le ${at}</div>` : ""}
+    ${i.how ? `<details><summary>Comment faire</summary><div class="how">${i.how}</div></details>` : ""}</div></div></li>`;
+}
+
+function render() {
+  const open = new Set([...document.querySelectorAll("details[open]")].map(d => d.closest(".item")?.querySelector("input")?.dataset.id));
+  let html = "";
+  phasesFor().forEach(p => {
+    const ids = p.items.map(i => i.id).concat(p.months ? p.months.list.map((_, k) => p.months.prefix + "-" + k) : []);
+    const n = ids.filter(isDone).length;
+    html += `<section class="phase${n === ids.length ? " complete" : ""}" aria-labelledby="h-${p.id}"><div class="rail"><span class="dot"></span></div><div class="phase-body">
+      <div class="phase-head"><div class="phase-meta"><span class="eyebrow">${p.when}</span><span class="count num">${n}/${ids.length}</span></div>
+      <h2 id="h-${p.id}">${p.title}</h2><p class="phase-intro">${p.intro}</p></div>
+      <ul class="items">${p.items.map(itemHTML).join("")}</ul>
+      ${p.months ? `<div><h3 style="margin-bottom:8px">Versements mensuels</h3><div class="months">${p.months.list.map((m, k) => { const id = p.months.prefix + "-" + k, d = isDone(id); return `<label class="month${d ? " done" : ""}"><input type="checkbox" data-id="${id}"${d ? " checked" : ""}><span>${m}<small>${p.months.label}</small></span></label>`; }).join("")}</div></div>` : ""}
+    </div></section>`;
+  });
+  if (tab === "invest") {
+  // routine annuelle
+  const yIds = ANNUAL.map(a => `y${year}-${a.id}`), yn = yIds.filter(isDone).length;
+  html += `<section class="phase" aria-labelledby="h-annual"><div class="rail"><span class="dot"></span></div><div class="phase-body">
+    <div class="phase-head"><div class="phase-meta"><span class="eyebrow">Chaque année, de 2027 à 2062</span><span class="count num">${yn}/${ANNUAL.length}</span></div>
+    <h2 id="h-annual">La routine annuelle</h2><p class="phase-intro">Une heure par an suffit. Choisis l'année, coche au fur et à mesure.</p></div>
+    <div class="year-nav"><button type="button" data-year="-1" aria-label="Année précédente">← Précédente</button><span class="year num">${year}</span><button type="button" data-year="1" aria-label="Année suivante">Suivante →</button><span class="age">tu auras ${year - BIRTH} ans</span></div>
+    <ul class="items">${ANNUAL.map(a => itemHTML({ id: `y${year}-${a.id}`, t: a.t })).join("")}</ul>
+  </div></section>`;
+  // jalons
+  const mn = MILESTONES.filter(m => isDone(m.id)).length;
+  html += `<section class="phase${mn === MILESTONES.length ? " complete" : ""}" aria-labelledby="h-ms"><div class="rail"><span class="dot"></span></div><div class="phase-body">
+    <div class="phase-head"><div class="phase-meta"><span class="eyebrow">2031 → 2062</span><span class="count num">${mn}/${MILESTONES.length}</span></div>
+    <h2 id="h-ms">Les grands jalons</h2><p class="phase-intro">Ce qui change avec le temps, et ce que tu fais à chaque étape.</p></div>
+    <ul class="items">${MILESTONES.map(m => itemHTML({ id: m.id, t: `<span class="num" style="color:var(--chestnut);font-size:13px">${m.date}</span><br>${m.t}`, how: `<p>${m.d}</p>` })).join("")}</ul>
+  </div></section>`;
+  }
+  document.getElementById("timeline").innerHTML = html;
+  document.querySelectorAll("[data-only]").forEach(el => { el.hidden = !el.dataset.only.split(" ").includes(tab); });
+  document.getElementById("page-title").textContent = tab === "parents" ? "Plan héritage 50+" : tab === "compare" ? "Infos et où faire" : "Plan retraite du foyer";
+  document.getElementById("lede").innerHTML = tab === "parents" ? PARENTS_LEDE : tab === "compare" ? COMPARE_LEDE : LEDE;
+  document.querySelectorAll("button[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+  open.forEach(id => { const el = id && document.querySelector(`input[data-id="${id}"]`); el?.closest(".item")?.querySelector("details")?.setAttribute("open", ""); });
+
+  const ids = allIds(), done = ids.filter(isDone).length, pct = ids.length ? Math.round(done / ids.length * 100) : 0;
+  document.getElementById("pct").textContent = pct + " %";
+  document.getElementById("bar").style.width = pct + "%";
+  const nx = firstOpen();
+  document.getElementById("next").innerHTML = nx ? `Prochaine étape · <b>${nx.label.replace(/<[^>]+>/g, " ")}</b> <span class="muted">(${nx.phase.when})</span>` : "Tout est coché. Bravo.";
+}
+
+document.addEventListener("change", e => { const id = e.target?.dataset?.id; if (id) toggle(id, e.target.checked); });
+document.addEventListener("click", e => {
+  const t = e.target.closest("button[data-tab]");
+  if (t) { tab = t.dataset.tab; try { localStorage.setItem("plan-heritage-tab", tab); } catch (err) {} render(); return; }
+  const b = e.target.closest("[data-year]"); if (!b) return;
+  year = Math.min(Math.max(year + Number(b.dataset.year), YEAR_MIN), YEAR_MAX); render();
+});
+
+/* ---------- simulateur ---------- */
+const eur = n => Math.round(n).toLocaleString("fr-FR") + " €";
+function simulate() {
+  const init = +document.getElementById("s-init").value, month = +document.getElementById("s-month").value;
+  const rate = +document.getElementById("s-rate").value / 100, stop = +document.getElementById("s-age").value;
+  document.getElementById("v-init").textContent = eur(init);
+  document.getElementById("v-month").textContent = eur(month) + " / mois";
+  document.getElementById("v-rate").textContent = rate * 100 + " % / an";
+  document.getElementById("v-age").textContent = stop + " ans (" + (BIRTH + stop) + ")";
+  const r = Math.pow(1 + rate, 1 / 12) - 1, startAge = 30; // fin 2028 ≈ 30 ans
+  const at = age => { let c = init; const m = Math.max(0, Math.round((age - startAge) * 12)); for (let k = 0; k < m; k++) c = c * (1 + r) + month; return c; };
+  const total = at(stop), versed = init + month * Math.max(0, (stop - startAge) * 12);
+  const cells = [
+    { k: "À 40 ans (2038)", v: at(40) },
+    { k: "À 50 ans (2048)", v: at(50) },
+    { k: `À ${stop} ans (${BIRTH + stop})`, v: total, main: true, s: `dont ${eur(versed)} versés` },
+    { k: "Revenu à 4 % par an", v: total * 0.04 / 12 * (1 - 0.186 * Math.max(0, (total - versed) / total)), s: "par mois, net des prélèvements sociaux (18,6 % sur la part de gains), en plus de la retraite publique", unit: " / mois" },
+  ];
+  document.getElementById("results").innerHTML = cells.map(c => `<div class="res${c.main ? " main" : ""}"><span class="k">${c.k}</span><span class="v">${eur(c.v)}${c.unit || ""}</span>${c.s ? `<span class="s">${c.s}</span>` : ""}</div>`).join("");
+}
+
+
+/* ---------- projection des parents : tableau + graphique ---------- */
+const PROJ = [{"m":800,"prudent":266000,"equilibre":283000,"dynamique":297000,"actions100":321000,"glissant":296000,"glissant_krach":238000,"rente":1410,"verse":209600},{"m":900,"prudent":282000,"equilibre":300000,"dynamique":314000,"actions100":340000,"glissant":313000,"glissant_krach":252000,"rente":1500,"verse":223300},{"m":1000,"prudent":298000,"equilibre":317000,"dynamique":332000,"actions100":358000,"glissant":330000,"glissant_krach":265000,"rente":1580,"verse":237000},{"m":1100,"prudent":314000,"equilibre":334000,"dynamique":349000,"actions100":376000,"glissant":347000,"glissant_krach":279000,"rente":1660,"verse":250700},{"m":1200,"prudent":330000,"equilibre":350000,"dynamique":366000,"actions100":394000,"glissant":364000,"glissant_krach":293000,"rente":1740,"verse":264400},{"m":1300,"prudent":346000,"equilibre":367000,"dynamique":384000,"actions100":413000,"glissant":381000,"glissant_krach":307000,"rente":1830,"verse":278100},{"m":1400,"prudent":362000,"equilibre":384000,"dynamique":401000,"actions100":431000,"glissant":399000,"glissant_krach":321000,"rente":1910,"verse":291800},{"m":1500,"prudent":378000,"equilibre":401000,"dynamique":418000,"actions100":449000,"glissant":416000,"glissant_krach":335000,"rente":1990,"verse":305500},{"m":1600,"prudent":395000,"equilibre":417000,"dynamique":436000,"actions100":468000,"glissant":433000,"glissant_krach":349000,"rente":2070,"verse":319200},{"m":1700,"prudent":411000,"equilibre":434000,"dynamique":453000,"actions100":486000,"glissant":450000,"glissant_krach":363000,"rente":2150,"verse":332900},{"m":1800,"prudent":427000,"equilibre":451000,"dynamique":470000,"actions100":504000,"glissant":467000,"glissant_krach":377000,"rente":2240,"verse":346600},{"m":1900,"prudent":443000,"equilibre":468000,"dynamique":488000,"actions100":523000,"glissant":485000,"glissant_krach":390000,"rente":2320,"verse":360300},{"m":2000,"prudent":459000,"equilibre":485000,"dynamique":505000,"actions100":541000,"glissant":502000,"glissant_krach":404000,"rente":2400,"verse":374000}];
+const fmtK = n => Math.round(n / 1000).toLocaleString("fr-FR") + " k€";
+function renderProjTable() {
+  document.getElementById("proj-body").innerHTML = PROJ.map(r => `<tr${r.m === 1500 ? ' class="hl"' : ""}><td><b>${eur(r.m)}</b></td><td class="num">${eur(r.verse)}</td><td class="num">${eur(r.prudent)}</td><td class="num">${eur(r.equilibre)}</td><td class="num">${eur(r.dynamique)}</td><td class="num">${eur(r.actions100)}</td><td class="num"><b>${eur(r.glissant)}</b></td><td class="num">${eur(r.glissant_krach)}</td><td class="num">${eur(r.rente)}/mois</td></tr>`).join("");
+}
+function renderProjChart() {
+  const W = 720, H = 380, L = 64, R = 170, T = 16, B = 40;
+  const x0 = 800, x1 = 2000, y0 = 200000, y1 = 560000;
+  const X = v => L + (v - x0) / (x1 - x0) * (W - L - R);
+  const Y = v => T + (1 - (v - y0) / (y1 - y0)) * (H - T - B);
+  const series = [
+    { k: "actions100", c: "var(--s2)", label: "100 % actions" },
+    { k: "glissant", c: "var(--s1)", label: "Glissant ★" },
+    { k: "prudent", c: "var(--s3)", label: "Prudent 40 %" },
+    { k: "glissant_krach", c: "var(--s1)", label: "Glissant si krach", dash: "6 5" },
+  ];
+  let g = "";
+  for (let v = 200000; v <= 550000; v += 50000) g += `<line class="grid" x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}"/><text class="axis" x="${L - 8}" y="${Y(v) + 4}" text-anchor="end">${fmtK(v)}</text>`;
+  for (let v = 800; v <= 2000; v += 200) g += `<text class="axis" x="${X(v)}" y="${H - B + 20}" text-anchor="middle">${v.toLocaleString("fr-FR")} €</text>`;
+  g += `<text class="axis" x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle">Versement mensuel</text>`;
+  const ends = series.map(s => ({ s, y: Y(PROJ[PROJ.length - 1][s.k]) })).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 16) ends[i].y = ends[i - 1].y + 16;
+  series.forEach(s => {
+    const d = PROJ.map((r, i) => `${i ? "L" : "M"}${X(r.m).toFixed(1)},${Y(r[s.k]).toFixed(1)}`).join(" ");
+    g += `<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"${s.dash ? ` stroke-dasharray="${s.dash}"` : ""}/>`;
+  });
+  ends.forEach(e => { g += `<text class="dlabel" x="${W - R + 10}" y="${e.y + 4}">${e.s.label} · ${fmtK(PROJ[PROJ.length - 1][e.s.k])}</text>`; });
+  g += `<line id="pc-cross" class="grid" y1="${T}" y2="${H - B}" stroke-dasharray="3 3" visibility="hidden"/><g id="pc-dots"></g>`;
+  g += `<rect id="pc-hit" x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/>`;
+  const wrap = document.getElementById("proj-chart");
+  wrap.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Capital à 65 ans selon le versement mensuel, de 800 à 2 000 euros, pour quatre scénarios. Détail dans le tableau ci-dessous.">${g}</svg><div class="chart-tip" hidden></div>`;
+  const svg = wrap.querySelector("svg"), tip = wrap.querySelector(".chart-tip");
+  const cross = svg.querySelector("#pc-cross"), dots = svg.querySelector("#pc-dots");
+  const show = ev => {
+    const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const m = Math.min(2000, Math.max(800, Math.round((x0 + (p.x - L) / (W - L - R) * (x1 - x0)) / 100) * 100));
+    const r = PROJ.find(q => q.m === m), cx = X(m);
+    cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("visibility", "visible");
+    dots.innerHTML = series.map(s => `<circle cx="${cx}" cy="${Y(r[s.k])}" r="4.5" fill="${s.c}" stroke="var(--surface)" stroke-width="2"/>`).join("");
+    tip.innerHTML = `<b>${eur(m)} par mois</b>` + [...series].sort((a, b) => r[b.k] - r[a.k]).map(s => `<div><span>${s.label}</span><span>${eur(r[s.k])}</span></div>`).join("") + `<div><span>Total versé</span><span>${eur(r.verse)}</span></div>`;
+    tip.hidden = false;
+    const box = wrap.getBoundingClientRect(), left = ev.clientX - box.left;
+    tip.style.left = Math.min(Math.max(0, left + 14), box.width - tip.offsetWidth) + "px";
+    tip.style.top = "8px";
+  };
+  const hide = () => { tip.hidden = true; cross.setAttribute("visibility", "hidden"); dots.innerHTML = ""; };
+  svg.querySelector("#pc-hit").addEventListener("pointermove", show);
+  svg.querySelector("#pc-hit").addEventListener("pointerdown", show);
+  svg.addEventListener("pointerleave", hide);
+}
+renderProjTable();
+renderProjChart();
+
+/* ---------- démarrage ---------- */
+loadLocal(); render(); setSync();
+(async () => {
+  try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch (e) { db = null; }
+  if (!db) { setSync(); return; }
+  mode = "db"; setSync();
+  db.collection("checks").onSnapshot(snap => {
+    snap.docs.forEach(d => { if (d.exists) state[d.id] = d.data(); });
+    saveLocal(); render();
+  }, () => { mode = "local"; setSync(); });
+})();
+</script>
+
+</body>
+</html>
